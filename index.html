@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            background-color: rgb(221, 221, 221);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+        #post-container {
+            width: 35%;
+            margin: auto;
+        }
+
+        .post {
+            border: 1px solid black;
+            border-radius: 3px;
+            margin: 3px;
+            padding: 3px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Netlify Functions</h1>
+    <div id="post-container">
+        <h2>Todo List</h2>
+        <div id="post-collection">
+
+        </div>
+    </div>
+    <script>
+        const getPosts = async () => {
+            const res = await fetch('/api/getPosts');
+            const posts = await res.json();
+            return posts;
+        }
+
+        async function displayPosts() {
+            const posts = await getPosts();
+            const postCollection = document.getElementById("post-collection");
+            posts.forEach(post => {
+                const postHtml = `
+                <div class="post">
+                    <h3>${post.title}</h3>
+                    <p>${post.body}</p>
+                    <small>Views: ${post.views}</small>
+                    <small>Comments: ${post.comments}</small>
+                </div>
+                `;
+                postCollection.insertAdjacentHTML('beforeend', postHtml);
+            });
+        }
+
+        displayPosts();
+    </script>
+</body>
+
+</html>
